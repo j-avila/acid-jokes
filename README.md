@@ -16,7 +16,7 @@ Endpoint URL: https://retoolapi.dev/zu9TVE/jokes
     "CreatedAt": 1670164409747
   }
 ```
-
+5
 ### HTTP method endpoints
 
 | Method Type  | Endpoint                          |

@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js}"],
+  mode: 'jit',
+  content: ["./src/**/*.{html,js, ts,tsx}"],
   theme: {
     screens: {
       sm: '480px',
@@ -10,8 +11,9 @@ export default {
     },
     colors: {
       'primary': '#6d9773',
-      'secondary': '#0c3b2e',
-      'background': '#bb8a52',
+      'secondary': '#bb8a52',
+      'background': '#efefef',
+      'font': '#0c3b2e',
       'surface': '#ffba00',
       'error': '#bc6c25',
     },
@@ -30,7 +32,6 @@ export default {
     }
   },
   extend: {},
-},
   plugins: [],
 }
 

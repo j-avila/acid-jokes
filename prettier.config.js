@@ -1,4 +1,3 @@
 // prettier.config.js
-module.exports = {
-  plugins: [require('prettier-plugin-tailwindcss')],
-}
+// eslint-disable-next-line no-undef
+export const plugins = [require('prettier-plugin-tailwindcss')];

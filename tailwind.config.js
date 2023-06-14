@@ -13,6 +13,7 @@ export default {
       'primary': '#6d9773',
       'secondary': '#bb8a52',
       'background': '#efefef',
+      'background-half': '#cdcbcb',
       'font': '#0c3b2e',
       'surface': '#ffba00',
       'error': '#bc6c25',

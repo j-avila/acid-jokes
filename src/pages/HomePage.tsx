@@ -34,3 +34,7 @@ function HomePage() {
 }
 
 export default HomePage
+
+// design references
+// table: https://dribbble.com/shots/20995371-Customer-Table
+// pallette & elements: https://www.pinterest.com/pin/345510602677766468/

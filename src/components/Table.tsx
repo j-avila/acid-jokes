@@ -33,22 +33,6 @@ const Table = (props: { data: Itable; tableKeys: string[] }) => {
   const [cells, setCells] = useState<IJoke[]>()
   const [colsHead, setColsHead] = useState<string>("")
   const [colsBody, setColsBody] = useState<string>("")
-  const Tkeys: string[] = tableKeys
-
-  // handle dinamic table heads & cells
-  const tableHeads = (arr: string[], accept: string[]): void => {
-    const heads: string[] = arr.filter((head) => {
-      let result
-      if (accept.includes(head)) {
-        result = head
-      }
-
-      return result
-    })
-
-    setHeads(heads)
-  }
-
   const tableCells = (cellData: IJoke[], cellKeys: string[]) => {
     const getCells = (cell: IJoke, accept: string[]) => {
       const result: object = {}
@@ -77,7 +61,6 @@ const Table = (props: { data: Itable; tableKeys: string[] }) => {
       setColsBody(
         `tableRows my-1 bg-background grid grid-cols-1 gap-0 md:md:grid-cols-5 rounded-lg`
       )
-      tableHeads(Tkeys, tableKeys)
       tableCells(fromattedData, tableKeys)
     }
   }, [data])
@@ -85,13 +68,13 @@ const Table = (props: { data: Itable; tableKeys: string[] }) => {
   return (
     <div className="w-full px-4 pb-12 pt-2 bg-background-half shadow-md rounded-lg overflow-hidden">
       <div className={colsHead}>
-        {heads ? (
-          heads.map((head) => (
+        {tableKeys ? (
+          tableKeys.map((head) => (
             <div
               key={`key-${head}`}
               className="tableDivision p-3 text-xs font-medium text-gray-500 text-center md:text-left"
             >
-              {head}
+              {head === "createdat" ? "crated date" : head}
             </div>
           ))
         ) : (

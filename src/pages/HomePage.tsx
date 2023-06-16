@@ -1,24 +1,25 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// libraries
+import { useEffect, useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+// components
+import Paginator from "../components/Paginator"
 import Table from "../components/Table"
+import { getJokes, handleJokes } from "../services"
+import { Itable } from "./types"
 
 function HomePage() {
-  const fakeData = [
-    {
-      id: 19,
-      Title: "Mountaineering",
-      Body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      Author: "crubery6s@simplemachines.org",
-      Views: 98,
-      CreatedAt: 1670164409747,
-    },
-    {
-      id: 20,
-      Title: "triste",
-      Body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      Author: "once@chupaloentonce.org",
-      Views: 98,
-      CreatedAt: 1670164409756456,
-    },
-  ]
+  const [page, setPage] = useState({ current: 1, perpage: 5, total: 0 })
+  const { data, isLoading, iserror } = useQuery<Itable>(["jokes"], getJokes)
+  // const dataHandler = useMutation(handleJokes)
+
+  useEffect(() => {
+    data?.length > 0 && setPage({ ...page, total: data.length })
+  }, [data])
+
+  useEffect(() => {
+    getJokes(page.current, page.current)
+  }, [page])
 
   return (
     <>
@@ -26,8 +27,16 @@ function HomePage() {
         Acid {"</>"} jokes
       </h1>
       <main className="p-8">
-        <Table data={fakeData} />
-        {/* TODO: create paginator */}
+        <Table
+          data={data}
+          tableKeys={["#", "title", "author", "createdat", "views"]}
+        />
+        <Paginator
+          state={page}
+          pageSize={page.perpage}
+          totalCount={page.total}
+          onPageChange={setPage}
+        />
       </main>
     </>
   )

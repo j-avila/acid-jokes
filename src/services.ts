@@ -1,34 +1,36 @@
+import { useQuery } from "@tanstack/react-query";
 import { IJoke, Itable } from "./pages/types"
+import { lowercaseObjectKeys } from "./utils";
 
-const lowercaseObjectKeys = (obj) => {
-  const keys = Object.keys(obj);
-  const lowercasedObj = {};
-
-  for (let i = 0; i < keys.length; i++) {
-    lowercasedObj[keys[i].toLowerCase()] = obj[keys[i]];
-  }
-
-  return lowercasedObj;
+// types
+export interface IPages {
+  current: number
+  perpage: number
+  total: number
 }
 
-export const url = (page?: number, limit?: number, id?: string) => {
+interface IfetchParams { page?: number, limit?: number, id?: string }
+
+// fetching requests
+export const url = ({ page, limit, id }: IfetchParams) => {
   if (page && limit) {
-    return `https://retoolapi.dev/zu9TVE/jokes/?_page=${page || 1}&_limit=${limit || 5}`
+    return `https://retoolapi.dev/zu9TVE/jokes/?_page=${page || 1}&_limit=${limit || 10}`
 
   }
   return `https://retoolapi.dev/zu9TVE/jokes/${id ? id : ''}`
 
 }
 
-export const getJokes = async (page: number, limit: number): Promise<IJoke[]> => {
-  const response = await fetch(url(page, limit))
+export const getJokes = async ({ current, perpage }: Exclude<IPages, 'total'>): Promise<Itable> => {
+  const response = await fetch(url({ page: current, limit: perpage }))
   let data = await response.json()
-  data = data.map((item: Itable) => lowercaseObjectKeys(item))
+  data = data.map((item: IJoke) => lowercaseObjectKeys(item))
   return data
 }
 
 export const handleJokes = async (method: string, joke?: IJoke, id?: string): Promise<IJoke[]> => {
-  const response = await fetch(url(undefined, undefined, id), {
+  const params = { undefined, undefined, id }
+  const response = await fetch(url(params), {
     method: method.toUpperCase(),
     headers: {
       'Content-Type': 'application/json',
@@ -39,4 +41,7 @@ export const handleJokes = async (method: string, joke?: IJoke, id?: string): Pr
   return data
 }
 
+
+// query hooks
+export const useJokes = (params: Exclude<IPages, 'total'>) => useQuery(['jokes'], () => getJokes(params))
 

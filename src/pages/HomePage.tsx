@@ -1,25 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // libraries
 import { useEffect, useState } from "react"
-import { useMutation, useQuery } from "@tanstack/react-query"
 // components
 import Paginator from "../components/Paginator"
 import Table from "../components/Table"
-import { getJokes, handleJokes } from "../services"
-import { Itable } from "./types"
+import { IPages, useJokes } from "../services"
 
 function HomePage() {
-  const [page, setPage] = useState({ current: 1, perpage: 5, total: 0 })
-  const { data, isLoading, iserror } = useQuery<Itable>(["jokes"], getJokes)
-  // const dataHandler = useMutation(handleJokes)
+  const [pages, setPage] = useState<IPages>({
+    current: 1,
+    perpage: 10,
+    total: 0,
+  })
+  const { data, refetch, isLoading } = useJokes(pages)
 
   useEffect(() => {
-    data?.length > 0 && setPage({ ...page, total: data.length })
+    refetch(pages)
+  }, [pages])
+
+  useEffect(() => {
+    data && setPage({ ...pages, total: data.length })
   }, [data])
-
-  useEffect(() => {
-    getJokes(page.current, page.current)
-  }, [page])
 
   return (
     <>
@@ -29,12 +30,13 @@ function HomePage() {
       <main className="p-8">
         <Table
           data={data}
+          isLoading={isLoading}
           tableKeys={["#", "title", "author", "createdat", "views"]}
         />
         <Paginator
-          state={page}
-          pageSize={page.perpage}
-          totalCount={page.total}
+          state={pages}
+          pageSize={pages.perpage}
+          totalCount={pages.total}
           onPageChange={setPage}
         />
       </main>

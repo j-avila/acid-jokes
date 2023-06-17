@@ -1,6 +1,6 @@
 import { IJoke } from "./pages/types";
 
-interface MyObject {
+export interface MyObject {
   [key: string]: string;
 }
 
@@ -13,4 +13,27 @@ export const orderObject = (obj: IJoke, keysOrder: string[]): MyObject => {
     }
   });
   return ordered;
+}
+
+
+export const createNumberArray = (start: number, end: number): number[] => {
+  const result: number[] = []
+
+  for (let i = start; i <= end; i++) {
+    result.push(i)
+  }
+
+  return result
+}
+
+
+export const lowercaseObjectKeys = (obj: IJoke) => {
+  const keys = Object.keys(obj);
+  const lowercasedObj = {};
+
+  for (let i = 0; i < keys.length; i++) {
+    lowercasedObj[keys[i].toLowerCase()] = obj[keys[i]];
+  }
+
+  return lowercasedObj;
 }

@@ -37,3 +37,19 @@ export const lowercaseObjectKeys = (obj: IJoke) => {
 
   return lowercasedObj;
 }
+
+
+export const compareArrays = (arr1: unknown[], arr2: unknown[]) => {
+  const matchIndices: string[] = [];
+  arr1.forEach((item, index) => {
+    if (arr2.includes(item)) {
+      matchIndices.push(index);
+    }
+  });
+
+  for (let i = matchIndices.length - 1; i >= 0; i--) {
+    arr1.splice(matchIndices[i], 1);
+  }
+
+  return arr1;
+}

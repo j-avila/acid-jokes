@@ -13,7 +13,7 @@ import JokeDetail from "./pages/JokeDetail"
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
-  { path: "detail", element: <JokeDetail /> },
+  { path: "detail/:id", element: <JokeDetail /> },
 ])
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

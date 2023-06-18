@@ -31,7 +31,10 @@ function HomePage() {
         <Table
           data={data}
           isLoading={isLoading}
-          tableKeys={["#", "title", "author", "createdat", "views"]}
+          tableKeys={{
+            heads: ["#", "title", "author", "createdat", "views"],
+            hiddenValues: ["id"],
+          }}
         />
         <Paginator
           state={pages}

@@ -12,10 +12,6 @@ export const TableLoader = ({
   const [colsNumber, setColsNumber] = useState("grid grid-cols-5 gap-4")
 
   useEffect(() => {
-    console.log("🔥", createNumberArray(1, 5))
-  }, [])
-
-  useEffect(() => {
     const newRows: number[] = createNumberArray(1, 5)
     setRowsNumber(newRows)
     setColsNumber(`grid grid-cols-${cols} gap-4`)

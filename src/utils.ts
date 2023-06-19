@@ -4,6 +4,8 @@ export interface MyObject {
   [key: string]: string;
 }
 
+export const relocateUrl = (url: string) => window.location.href = url
+
 export const orderObject = (obj: IJoke, keysOrder: string[]): MyObject => {
   const ordered: MyObject = {};
   keysOrder.forEach((key) => {
@@ -52,4 +54,25 @@ export const compareArrays = (arr1: unknown[], arr2: unknown[]) => {
   }
 
   return arr1;
+}
+
+export const findWord = (str: string, src: string): boolean => {
+  const regex = new RegExp(str, 'i');
+  return regex.test(src);
+}
+
+
+export const checkLoginData = (): boolean => {
+  const loginData = localStorage.getItem('loginData');
+
+  if (loginData) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export const clearLoginData = (): void => {
+  localStorage.removeItem('loginData');
+  relocateUrl('/')
 }

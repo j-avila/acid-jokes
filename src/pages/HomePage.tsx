@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // libraries
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 // components
 import Paginator from "../components/Paginator"
 import Table from "../components/Table"
 import { IPages, useJokes } from "../services"
 
-function HomePage() {
+const HomePage = () => {
   const [pages, setPage] = useState<IPages>({
     current: 1,
     perpage: 10,
@@ -24,10 +24,7 @@ function HomePage() {
 
   return (
     <>
-      <h1 className="text-xl font-bold text-font text-center py-6">
-        Acid {"</>"} jokes
-      </h1>
-      <main className="p-8">
+      <div className="p-8">
         <Table
           data={data}
           isLoading={isLoading}
@@ -42,7 +39,7 @@ function HomePage() {
           totalCount={pages.total}
           onPageChange={setPage}
         />
-      </main>
+      </div>
     </>
   )
 }

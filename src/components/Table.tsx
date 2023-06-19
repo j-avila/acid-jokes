@@ -2,16 +2,18 @@
 // libraries
 import { useEffect, useState } from "react"
 import { MyObject, compareArrays, orderObject } from "../utils"
-import { IJoke, Itable } from "../pages/types"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCoffee } from "@fortawesome/free-solid-svg-icons"
 // components
 import TableLoader from "./TableLoader"
-import CampaignIcon from "@mui/icons-material/Campaign"
+// types
+import { IJoke, Itable } from "../pages/types"
 
 // rows
 const TdItems = (props: {
   cell: IJoke
   index: number
-  key: number
+  key: string | number
   hidden: string[]
 }) => {
   const { cell, index, hidden } = props
@@ -20,18 +22,56 @@ const TdItems = (props: {
   keys.unshift(index.toString())
   keysFiltered.unshift(index.toString())
 
+  const handleViewsStyles = (key: string, views: number): string => {
+    let color = "text-font"
+    let styles = `shadow td px-3 py-4 text-sm ${color} md:text-left truncate`
+
+    if (key === "views") {
+      const viewsCount = Number(views)
+      if (viewsCount <= 25) {
+        styles =
+          "shadow td px-3 py-4 text-sm bg-tomato text-background md:text-left font-bold rounded-r truncate"
+      } else if (viewsCount > 25 && viewsCount <= 50) {
+        styles =
+          "shadow td px-3 py-4 text-sm bg-orange text-background md:text-left font-bold rounded-r truncate"
+      } else if (viewsCount > 60 && viewsCount <= 75) {
+        styles =
+          "shadow td px-3 py-4 text-sm bg-yellow text-font md:text-left font-bold rounded-r truncate"
+      } else if (viewsCount > 75) {
+        styles =
+          "shadow td px-3 py-4 text-sm bg-green  text-background md:text-left font-bold rounded-r truncate"
+      }
+    }
+    return styles
+  }
+
   return (
     <>
       {keysFiltered.length > 0 ? (
         keysFiltered.map((key) => (
-          <div
-            key={`cell-${key}`}
-            className="shadow td px-3 py-4 text-sm text-center md:text-left truncate"
-          >
-            <a href={`/detail/${cell.id}`}>
-              {cell[key as string] || index || "No Aviable"}
-            </a>
-          </div>
+          <>
+            {key === "title" ? (
+              <a
+                className="hover:underline"
+                href={`/detail/${cell.id}`}
+                key={`cell-${key}`}
+              >
+                <div className={handleViewsStyles(key, cell[key])}>
+                  {cell[key] ||
+                    (cell[key] === " " && "no data") ||
+                    index ||
+                    "No Aviable"}
+                </div>
+              </a>
+            ) : (
+              <div className={handleViewsStyles(key, cell[key])}>
+                {cell[key] ||
+                  (cell[key] === " " && "no data") ||
+                  index ||
+                  "No Aviable"}
+              </div>
+            )}
+          </>
         ))
       ) : (
         <p className="text-center">not data</p>
@@ -58,7 +98,6 @@ const Table = (props: {
     cellKeys: string[],
     hidden: string[]
   ) => {
-    // TODO filtrar aqui los hidden para que no
     const getCells = (cell: IJoke, accept: string[], hiddenVals: string[]) => {
       const allValues = hiddenVals ? [...accept, ...hiddenVals] : accept
       const result: object = {}
@@ -90,10 +129,8 @@ const Table = (props: {
         `tableHeads grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length}`
       )
       setColsBody(
-        `tableRows my-1 bg-background grid grid-cols-1 gap-0 md:md:grid-cols-${tableKeys.heads.length} rounded-lg`
+        `tableRows my-1 bg-background grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length} rounded-lg`
       )
-
-      console.log(formattedData) // TODO hasta aqui ok el hidden value de id
 
       tableCells(formattedData, tableKeys.heads, tableKeys.hiddenValues)
     }
@@ -124,7 +161,6 @@ const Table = (props: {
         <>
           {cells ? (
             cells.map((cell, index) => (
-              // TODO Filtrar aqui para evitar rendirzar los hidden como id
               <div key={cell.id} className={colsBody}>
                 <TdItems
                   key={cell.id}
@@ -140,8 +176,8 @@ const Table = (props: {
         </>
       ) : (
         <div className="flex-col text-center my-10 bg-background p-8 rounded">
-          <CampaignIcon sx={{ fontSize: 100 }} />
-          <h1>You've reached the end of the jokes</h1>
+          <FontAwesomeIcon icon={faCoffee} fontSize={100} className="pb-8" />
+          <h1 className="text-lg">You've reached the end of the jokes</h1>
         </div>
       )}
     </div>

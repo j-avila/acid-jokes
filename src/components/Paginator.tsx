@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react"
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
+import { useState } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons"
 
 type Ipagination = {
   current: number
@@ -36,7 +39,10 @@ const Pagination = ({
     <nav className="paginator flex items-center justify-center max-w-xl mt-8 m-auto">
       {currentPage === 1 ||
         (currentPage > 0 && (
-          <ArrowBackIosIcon
+          <FontAwesomeIcon
+            className="pr-6 text-primary"
+            icon={faChevronLeft}
+            fontSize={20}
             onClick={() => handlePageChange("current", currentPage - 1)}
           />
         ))}
@@ -57,7 +63,10 @@ const Pagination = ({
         </select>
       </div>
       {totalCount > 0 && (
-        <ArrowForwardIosIcon
+        <FontAwesomeIcon
+          className="pl-6 text-primary"
+          icon={faChevronRight}
+          fontSize={20}
           onClick={() => handlePageChange("current", currentPage + 1)}
         />
       )}

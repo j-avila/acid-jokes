@@ -4,38 +4,45 @@ import { lowercaseObjectKeys } from "./utils";
 
 // types
 export interface IPages {
-  current: number
-  perpage: number
-  total: number
+  current: number | undefined
+  perpage: number | undefined
+  total?: number,
+  id?: number | string
 }
 
-interface IfetchParams { page?: number, limit?: number, id?: string }
-
 // fetching requests
-export const url = ({ page, limit, id }: IfetchParams) => {
-  if (page && limit) {
-    return `https://retoolapi.dev/zu9TVE/jokes/?_page=${page || 1}&_limit=${limit || 10}`
+export const url = ({ current, perpage, id }: Exclude<IPages, 'total'>) => {
+  if (current && perpage) {
+    return `https://retoolapi.dev/zu9TVE/jokes/?_page=${current || 1}&_limit=${perpage || 10}`
 
   }
   return `https://retoolapi.dev/zu9TVE/jokes/${id ? id : ''}`
 
 }
 
-export const getJokes = async ({ current, perpage }: Exclude<IPages, 'total'>): Promise<Itable> => {
-  const response = await fetch(url({ page: current, limit: perpage }))
+export const getJokes = async ({ current, perpage }: Exclude<IPages, ["id", "total"]>): Promise<Itable> => {
+  const response = await fetch(url({ current, perpage }))
   let data = await response.json()
   data = data.map((item: IJoke) => lowercaseObjectKeys(item))
   return data
 }
 
-export const handleJokes = async (method: string, joke?: IJoke, id?: string): Promise<IJoke[]> => {
-  const params = { undefined, undefined, id }
+export const getJoke = async (id: number): Promise<IJoke> => {
+  const response = await fetch(url({ current: undefined, perpage: undefined, id }))
+  let data = await response.json()
+  data = lowercaseObjectKeys(data)
+  return data
+}
+
+export const handleJokes = async (jokeData: { method: string, joke?: IJoke, id?: string }): Promise<IJoke[]> => {
+  const params: IPages = { current: undefined, perpage: undefined, id: jokeData.id }
   const response = await fetch(url(params), {
-    method: method.toUpperCase(),
+    method: jokeData.method.toUpperCase(),
+    mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: joke ? JSON.stringify(joke) : undefined
+    body: JSON.stringify(jokeData.joke)
   })
   const data = await response.json()
   return data
@@ -44,4 +51,5 @@ export const handleJokes = async (method: string, joke?: IJoke, id?: string): Pr
 
 // query hooks
 export const useJokes = (params: Exclude<IPages, 'total'>) => useQuery(['jokes'], () => getJokes(params))
+export const useJokeDetail = (id: number) => useQuery(['jokeDetail'], () => getJoke(id))
 

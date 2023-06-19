@@ -1,11 +1,11 @@
 // types
 export type IJoke = {
   id: number
-  Title: string
-  Body: string
-  Author: string
-  Views: number
-  CreatedAt: number
+  title: string
+  body: string
+  author: string
+  views: number
+  createdat: string
 }
 
 export type Itable = Array<IJoke>

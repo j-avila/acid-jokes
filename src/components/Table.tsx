@@ -5,9 +5,10 @@ import { MyObject, compareArrays, orderObject } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoffee } from "@fortawesome/free-solid-svg-icons"
 // components
-import TableLoader from "./TableLoader"
+import TableLoader from "./TableSkeleton"
 // types
 import { IJoke, Itable } from "../pages/types"
+import { useNotifications } from "../context/useNotifications"
 
 // rows
 const TdItems = (props: {
@@ -23,8 +24,7 @@ const TdItems = (props: {
   keysFiltered.unshift(index.toString())
 
   const handleViewsStyles = (key: string, views: number): string => {
-    let color = "text-font"
-    let styles = `shadow td px-3 py-4 text-sm ${color} md:text-left truncate`
+    let styles = `shadow td px-3 py-4 text-sm text-left truncate`
 
     if (key === "views") {
       const viewsCount = Number(views)
@@ -41,6 +41,8 @@ const TdItems = (props: {
         styles =
           "shadow td px-3 py-4 text-sm bg-green  text-background md:text-left font-bold rounded-r truncate"
       }
+    } else if (key === "#") {
+      styles = "shadow td px-3 py-4 text-sm md:text-left truncate rounded-l"
     }
     return styles
   }
@@ -50,7 +52,7 @@ const TdItems = (props: {
       {keysFiltered.length > 0 ? (
         keysFiltered.map((key) => (
           <>
-            {key === "title" ? (
+            {key === "title" || key == "#" ? (
               <a
                 className="hover:underline"
                 href={`/detail/${cell.id}`}
@@ -88,6 +90,7 @@ const Table = (props: {
 }) => {
   const { data, tableKeys, isLoading } = props
   const [cells, setCells] = useState<IJoke[]>()
+  const { value } = useNotifications()
   const [colsHead, setColsHead] = useState<string>(
     "tableHeads grid grid-cols-1 gap-0 md:grid-cols-5"
   )
@@ -129,7 +132,7 @@ const Table = (props: {
         `tableHeads grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length}`
       )
       setColsBody(
-        `tableRows my-1 bg-background grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length} rounded-lg`
+        `tableRows my-1 bg-paper bg-opacity-5 grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length} rounded-lg`
       )
 
       tableCells(formattedData, tableKeys.heads, tableKeys.hiddenValues)
@@ -137,13 +140,17 @@ const Table = (props: {
   }, [data])
 
   return (
-    <div className="w-full px-4 pb-12 pt-2 bg-background-half shadow-md rounded-lg overflow-hidden">
+    <div
+      className={`w-full px-4 pb-12 pt-2 shadow-md rounded-lg overflow-hidden ${
+        value.dark ? "dark:bg-font" : "bg-paper"
+      }`}
+    >
       <div className={colsHead}>
         {tableKeys.heads ? (
           tableKeys.heads.map((head) => (
             <div
               key={`key-${head}`}
-              className="tableDivision p-3 text-xs font-medium text-gray-500 text-center md:text-left"
+              className="tableDivision p-3 text-xs font-medium text-center md:text-left"
             >
               {head === "createdat" ? "crated date" : head}
             </div>
@@ -152,7 +159,11 @@ const Table = (props: {
           <h1>No data</h1>
         )}
       </div>
-      <span className="w-full h-px my-4 block bg-font"></span>
+      <span
+        className={`w-full h-px my-4 block ${
+          value.dark ? "dark:bg-paper" : "bg-font"
+        }`}
+      ></span>
       {isLoading ? (
         <>
           <TableLoader />
@@ -175,9 +186,13 @@ const Table = (props: {
           )}
         </>
       ) : (
-        <div className="flex-col text-center my-10 bg-background p-8 rounded">
+        <div
+          className={`flex-col text-center my-10 p-8 rounded ${
+            value.dark ? "dark:bg-font-half" : "bg-paper-half"
+          }`}
+        >
           <FontAwesomeIcon icon={faCoffee} fontSize={100} className="pb-8" />
-          <h1 className="text-lg">You've reached the end of the jokes</h1>
+          <h1 className="text-lg ">You've reached the end of the jokes</h1>
         </div>
       )}
     </div>

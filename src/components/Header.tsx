@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { findWord, relocateUrl } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCode } from "@fortawesome/free-solid-svg-icons"
-import Logo from "./Logo"
+import ThemeToggle from "./ThemeToggle"
 
 type IAction = {
   [key: string]: {
@@ -62,9 +62,15 @@ const Header = () => {
   }, [window.location.href])
 
   return (
-    <header className="flex justify-between align-middle w-full px-8 mt-6">
-      <Logo />
-      <ActionButton action={state} />
+    <header className="flex justify-between align-middle w-full py-8 px-12 ">
+      <h1 className="text-xl font-bold text-center py-2">
+        Acid <FontAwesomeIcon className="font-primary" icon={faCode} beatFade />{" "}
+        jokes
+      </h1>
+      <div className="flex">
+        <ThemeToggle />
+        <ActionButton action={state} />
+      </div>
     </header>
   )
 }

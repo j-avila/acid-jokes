@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { createNumberArray } from "../utils"
 
-export const TableLoader = ({
+export const TableSkeleton = ({
   rows = 4,
   cols = 5,
 }: {
@@ -28,11 +28,11 @@ export const TableLoader = ({
             <div className="flex-1 space-y-6 py-1">
               <div className="space-y-3">
                 <div className={colsNumber}>
-                  <div className="h-4 bg-background rounded col-span-1"></div>
-                  <div className="h-4 bg-background rounded col-span-1"></div>
-                  <div className="h-4 bg-background rounded col-span-1"></div>
-                  <div className="h-4 bg-background rounded col-span-1"></div>
-                  <div className="h-4 bg-background rounded col-span-1"></div>
+                  <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1"></div>
+                  <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1"></div>
+                  <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1"></div>
+                  <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1"></div>
+                  <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1"></div>
                 </div>
               </div>
             </div>
@@ -43,4 +43,4 @@ export const TableLoader = ({
   )
 }
 
-export default TableLoader
+export default TableSkeleton

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // libraries
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 // components
 import Paginator from "../components/Paginator"
 import Table from "../components/Table"

@@ -1,20 +1,22 @@
 // libraries
-import React from "react"
-import { checkLoginData } from "./utils"
+import React, { useEffect } from "react"
+import { checkLoginData, checkTheme } from "./utils"
 import ReactDOM from "react-dom/client"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 // components
 import Login from "./pages/Login"
+import Header from "./components/Header"
 import HomePage from "./pages/HomePage"
 import JokeDetail from "./pages/JokeDetail"
-import Header from "./components/Header"
 import Toaster from "./components/Toaster"
-import NotificationsProvider from "./context/ContextWrapper"
-// styles
-import "tailwindcss/tailwind.css"
 import Footer from "./components/Footer"
+import NotificationsProvider from "./context/ContextWrapper"
+import { useNotifications } from "./context/useNotifications"
+// styles
+import "./app.css"
+import "tailwindcss/tailwind.css"
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
@@ -23,24 +25,41 @@ const router = createBrowserRouter([
   { path: "detail/", element: <JokeDetail /> },
 ])
 
+// eslint-disable-next-line react-refresh/only-export-components
+const Wrapper = ({ children }) => {
+  const { value } = useNotifications()
+
+  useEffect(() => {
+    localStorage.theme = value.dark ? "dark" : "light"
+  }, [value.dark])
+
+  useEffect(() => {
+    checkTheme()
+  })
+
+  return (
+    <div className={`app ${value.dark ? "dark" : ""} h-screen`}>{children}</div>
+  )
+}
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <NotificationsProvider>
-        <>
+        <Wrapper>
+          <ReactQueryDevtools />
           {checkLoginData() ? (
-            <main className="p-2">
+            <main>
               <Header />
               <RouterProvider router={router} />
             </main>
           ) : (
             <Login />
           )}
-        </>
-        <Toaster />
+          <Footer />
+          <Toaster />
+        </Wrapper>
       </NotificationsProvider>
-      <Footer />
     </QueryClientProvider>
   </React.StrictMode>
 )

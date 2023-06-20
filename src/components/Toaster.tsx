@@ -16,7 +16,7 @@ const Toaster = () => {
     setStyles(
       `${defaultStyles} ${
         value.type === "error"
-          ? "bg-error text-background-half"
+          ? "bg-error text-paper-half"
           : "bg-surface text-font"
       }`
     )

@@ -1,9 +1,10 @@
-import React, { createContext, useState } from "react"
+import { createContext, useState } from "react"
 type IValueObj = {
   message: string
   type: string
   duration: number
   action: () => void
+  dark?: boolean
 }
 
 export interface INotificationsProps {
@@ -20,6 +21,7 @@ const NotificationsProvider = ({ children }) => {
     message: undefined,
     type: "alert",
     duration: undefined,
+    dark: false,
   })
 
   const updateValue = (newValue: IValueObj) => {

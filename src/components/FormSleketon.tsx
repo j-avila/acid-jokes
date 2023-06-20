@@ -24,7 +24,9 @@ export const FormSkeleton = ({
           key={row}
           className="mb-4 px-3 py-4 text-sm text-center md:text-left truncate"
         >
-          <div className="h-4 bg-background rounded col-span-1"> </div>
+          <div className="h-4 bg-paper dark:bg-font-half rounded col-span-1">
+            {" "}
+          </div>
         </div>
       ))}
     </>

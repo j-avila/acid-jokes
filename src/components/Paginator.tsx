@@ -51,7 +51,7 @@ const Pagination = ({
         <select
           name="perpage"
           id="perpage"
-          className="ml-4"
+          className="bg-[transparent] ml-4"
           onChange={(e) => handlePageChange("perpage", Number(e.target.value))}
         >
           <option value="5" selected={pageSize === 5}>

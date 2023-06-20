@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "ab3c38e0-4df1-4431-9979-89c824535ba7",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:5173/1686521618139",
+    "url": "https://retoolapi.dev/zu9TVE/jokes/1686521618138",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2023-06-20T01:01:47.539Z",
+    "modified": "2023-06-20T01:04:20.714Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

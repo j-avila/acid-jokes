@@ -7,7 +7,11 @@ import FormSkeleton from "../components/FormSleketon"
 import { useNotifications } from "../context/useNotifications"
 import { relocateUrl } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFan, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
+import {
+  faFan,
+  faPaperPlane,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons"
 
 const JokeDetail = () => {
   const { id } = useParams()
@@ -22,25 +26,39 @@ const JokeDetail = () => {
     views: 0,
   })
   const { data, isLoading } = useJokeDetail(morphedId)
+  const { value } = useNotifications()
+  const [isHover, setHover] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false)
 
   // handling the fetching events
   const mutation = useMutation({
     mutationFn: handleJokes,
-    onSuccess: (): void => {
-      updateValue({
-        message: "Joke saved successfully 👻!",
+    onSuccess: (data): void => {
+      console.log(data)
+      const success = {
+        message: "Joke saved successfully 👻 !",
         type: "success",
         action: () => relocateUrl("/"),
         duration: 3000,
-      })
+      }
+      const deleted = {
+        message: "Joke deleted 💩 !",
+        type: "error",
+        action: () => relocateUrl("/"),
+        duration: 3000,
+      }
+
+      updateValue(data.id ? success : deleted)
     },
-    onError: () =>
+    onError: () => {
       updateValue({
         message: "🤔 hmm... something worng happened, can try it again?",
         type: "error",
         action: (error: string) => console.log("☠️", error),
         duration: 5000,
-      }),
+      })
+      setLoading(false)
+    },
   })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -54,10 +72,14 @@ const JokeDetail = () => {
   const handleSubmit = (e: FormEvent<HTMLInputElement>): void => {
     e.preventDefault()
     // Handle form submission logic here
-    console.log(formData)
     const method = id ? "patch" : "post"
+    setLoading(true)
     mutation.mutate({ method, joke: formData, id })
-    // TODO manejar el success  o fail a terminar la reqest
+  }
+
+  const handleDelete = (): void => {
+    setLoading(true)
+    mutation.mutate({ method: "delete", joke: formData, id })
   }
 
   useEffect(() => {
@@ -67,7 +89,9 @@ const JokeDetail = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-lg shadow-md p-6 max-w-md mx-auto"
+      className={`rounded-lg shadow-md p-6 max-w-md mx-auto ${
+        value ? "dark:bg-font" : "bg-paper "
+      }`}
     >
       {isLoading ? (
         <FormSkeleton rows={6} />
@@ -86,7 +110,7 @@ const JokeDetail = () => {
               name="title"
               value={formData?.title}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
             />
           </div>
@@ -103,7 +127,7 @@ const JokeDetail = () => {
               name="author"
               value={formData?.author}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
             />
           </div>
@@ -120,7 +144,7 @@ const JokeDetail = () => {
               name="createdAt"
               value={formData?.createdat}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 border text-font border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
             />
           </div>
@@ -137,7 +161,7 @@ const JokeDetail = () => {
               name="views"
               value={formData?.views}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
             />
           </div>
@@ -154,20 +178,22 @@ const JokeDetail = () => {
               value={formData?.body}
               onChange={handleChange}
               rows={10}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
-            ></textarea>
+            />
           </div>
         </>
       )}
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={loading}
         className={`w-full px-4 py-2 text-background bg-indigo-500 rounded ${
-          isLoading ? "bg-background-half " : "bg-primary"
+          loading ? "bg-paper-half " : "bg-primary"
         } hover:bg-primary-half`}
+        onMouseEnter={() => setHover("plane")}
+        onMouseLeave={() => setHover("plane")}
       >
-        {isLoading ? (
+        {loading ? (
           <>
             <span>Wait a minute please</span>
             <FontAwesomeIcon className="pl-4" fontSize={20} icon={faFan} spin />
@@ -180,10 +206,46 @@ const JokeDetail = () => {
               fontSize={20}
               className="pl-4"
               icon={faPaperPlane}
+              bounce={isHover === "plane"}
             />
           </>
         )}
       </button>
+      {id && (
+        <button
+          type="button"
+          disabled={loading}
+          className={`w-full px-4 py-2 mt-6 bg-indigo-500 rounded ${
+            loading ? "bg-paper-half" : "bg-error"
+          }`}
+          onClick={() => handleDelete()}
+          onMouseEnter={() => setHover("trash")}
+          onMouseLeave={() => setHover("")}
+        >
+          {loading ? (
+            <>
+              <span>Wait a minute please</span>
+              <FontAwesomeIcon
+                className="pl-4"
+                fontSize={20}
+                icon={faFan}
+                spin
+              />
+            </>
+          ) : (
+            <>
+              <span>{id ? "Edit Joke" : "Create Joke"}</span>
+
+              <FontAwesomeIcon
+                fontSize={20}
+                className="pl-4"
+                icon={faTrashCan}
+                bounce={isHover === "trash"}
+              />
+            </>
+          )}
+        </button>
+      )}
     </form>
   )
 }

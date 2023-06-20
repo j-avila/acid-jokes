@@ -77,7 +77,7 @@ export const checkLoginData = (): boolean => {
 
 export const clearLoginData = (): void => {
   localStorage.removeItem('loginData');
-  relocateUrl('/')
+  relocateUrl(baseUrl)
 }
 
 export const checkTheme = (): void => {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // libraries
 import { useEffect, useState } from "react"
-import { compareArrays, orderObject } from "../utils"
+import { baseUrl, compareArrays, orderObject } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoffee } from "@fortawesome/free-solid-svg-icons"
 // components
@@ -57,7 +57,7 @@ const TdItems = (props: {
             {key === "title" || key == "#" ? (
               <Link
                 className="hover:underline"
-                to={`/detail/${cell.id}`}
+                to={`${baseUrl}detail/${cell.id}`}
                 key={`cell-${key}`}
               >
                 <div

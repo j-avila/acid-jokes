@@ -25,7 +25,8 @@ const router = createBrowserRouter([
     element: (
       <>
         <Header />
-        <HomePage /> <Footer />
+        <HomePage />
+        <Footer />
       </>
     ),
   },

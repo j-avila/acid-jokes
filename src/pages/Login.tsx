@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 // components
 import Logo from "../components/Logo"
-import { checkLoginData, relocateUrl } from "../utils"
+import { baseUrl, checkLoginData, relocateUrl } from "../utils"
 import { useNotifications } from "../context/useNotifications"
 
 interface IloginData {
@@ -41,7 +41,7 @@ const Login = () => {
     localStorage.setItem("loginData", JSON.stringify(loginData))
     if (checkLoginData()) {
       setLoading(false)
-      relocateUrl("/")
+      relocateUrl(baseUrl)
     }
   }
 

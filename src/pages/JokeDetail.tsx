@@ -11,6 +11,7 @@ import {
   faPaperPlane,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons"
+import { baseUrl } from "../utils"
 
 const JokeDetail = () => {
   const { id } = useParams()
@@ -41,12 +42,12 @@ const JokeDetail = () => {
       const success = {
         message: "Joke saved successfully 👻 !",
         type: "success",
-        action: () => navigate("/"),
+        action: () => navigate(baseUrl),
         duration: 3000,
       }
       const deleted = {
         message: "Joke deleted 💩 !",
-        action: () => navigate("/"),
+        action: () => navigate(baseUrl),
         duration: 3000,
       }
 

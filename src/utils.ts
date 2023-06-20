@@ -1,5 +1,7 @@
 import { IJoke } from "./pages/types";
 
+
+export const baseUrl = '/acid-jokes/'
 export interface MyObject {
   [key: string]: string;
 }

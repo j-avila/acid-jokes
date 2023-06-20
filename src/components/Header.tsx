@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
-import { findWord } from "../utils"
+import { baseUrl, findWord } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCode } from "@fortawesome/free-solid-svg-icons"
 import ThemeToggle from "./ThemeToggle"
@@ -21,13 +21,13 @@ const ActionButton = (props: { action: string }): JSX.Element => {
       title: "New joke",
       styles:
         "px-4 py-2 block text-paper bg-indigo-500 flex items-center rounded bg-secondary  hover:bg-secondary-half",
-      route: "/detail",
+      route: `${baseUrl}detail/`,
     },
     back: {
       title: "Go back",
       styles:
         "px-4 py-2 block text-paper bg-indigo-500 flex items-center rounded bg-secondary hover:bg-secondary-half",
-      route: "/",
+      route: baseUrl,
     },
   }
 

@@ -1,6 +1,6 @@
 // libraries
 import React, { useEffect } from "react"
-import { checkLoginData, checkTheme } from "./utils"
+import { baseUrl, checkLoginData, checkTheme } from "./utils"
 import ReactDOM from "react-dom/client"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
@@ -21,7 +21,7 @@ import "tailwindcss/tailwind.css"
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: baseUrl,
     element: (
       <>
         <Header />
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/detail",
+    path: `${baseUrl}detail/`,
     element: (
       <>
         <Header />
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/detail/:id",
+    path: `${baseUrl}detail/:id`,
     element: (
       <>
         <Header />

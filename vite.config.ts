@@ -6,6 +6,7 @@ import svgr from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/acid-jokes/',
   plugins: [react(), svgr()],
   "resolve": {
     alias: [
@@ -13,5 +14,9 @@ export default defineConfig({
       { find: '@/assets', replacement: fileURLToPath(new URL('./src/assets', import.meta.url)) },
 
     ]
-  }
+  },
+  build: {
+    outDir: 'dist',
+  },
+  publicDir: 'assets',
 })

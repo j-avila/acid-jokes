@@ -20,9 +20,35 @@ import "tailwindcss/tailwind.css"
 
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
-  { path: "/", element: <HomePage /> },
-  { path: "detail/:id", element: <JokeDetail /> },
-  { path: "detail/", element: <JokeDetail /> },
+  {
+    path: "/",
+    element: (
+      <>
+        <Header />
+        <HomePage /> <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/detail",
+    element: (
+      <>
+        <Header />
+        <JokeDetail />
+        <Footer />
+      </>
+    ),
+  },
+  {
+    path: "/detail/:id",
+    element: (
+      <>
+        <Header />
+        <JokeDetail />
+        <Footer />
+      </>
+    ),
+  },
 ])
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -50,13 +76,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <ReactQueryDevtools />
           {checkLoginData() ? (
             <main>
-              <Header />
               <RouterProvider router={router} />
             </main>
           ) : (
             <Login />
           )}
-          <Footer />
           <Toaster />
         </Wrapper>
       </NotificationsProvider>

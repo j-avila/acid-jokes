@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "serve:local": "cd dist && http-server -p 3000",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "tailwind": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+    "tailwind": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "tailwind:build": "npx tailwindcss -o ./dist/output.css --minify"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,7 +22,8 @@
     "@tanstack/react-query-devtools": "^4.29.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.12.1",
+    "react-router": "^6.13.0",
+    "react-router-dom": "^6.13.0",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {

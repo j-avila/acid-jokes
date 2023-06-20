@@ -4,10 +4,10 @@ import { useEffect, useState } from "react"
 // components
 import Paginator from "../components/Paginator"
 import Table from "../components/Table"
-import { IPages, useJokes } from "../services"
+import { useJokes } from "../services"
 
 const HomePage = () => {
-  const [pages, setPage] = useState<IPages>({
+  const [pages, setPage] = useState({
     current: 1,
     perpage: 10,
     total: 0,
@@ -15,7 +15,7 @@ const HomePage = () => {
   const { data, refetch, isLoading } = useJokes(pages)
 
   useEffect(() => {
-    refetch(pages)
+    refetch(pages as unknown)
   }, [pages])
 
   useEffect(() => {

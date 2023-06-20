@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { ChangeEvent, useState } from "react"
 import {
   faEye,
   faEyeSlash,
@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 // components
 import Logo from "../components/Logo"
-import { checkLoginData, checkTheme, relocateUrl } from "../utils"
+import { checkLoginData, relocateUrl } from "../utils"
 import { useNotifications } from "../context/useNotifications"
 
 interface IloginData {
@@ -26,7 +26,7 @@ const Login = () => {
   })
   const [ishover, setHover] = useState(false)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setLoginData((prevState) => ({
       ...prevState,
@@ -34,7 +34,7 @@ const Login = () => {
     }))
   }
 
-  const handleSubmit = (e: FormEvent<HTMLInputElement>): void => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     // Handle form submission logic here
     setLoading(true)
@@ -53,7 +53,6 @@ const Login = () => {
           className={`rounded-lg shadow-md p-6 max-w-md mx-auto mt-6 ${
             value.dark ? "dark:bg-font-half" : "bg-paper-half"
           }`}
-          onSubmit={handleSubmit}
         >
           <>
             <div className="mb-4">
@@ -98,13 +97,14 @@ const Login = () => {
             </div>
           </>
           <button
-            type="submit"
+            type="button"
             disabled={isLoading}
             className={`w-full px-4 py-2 text-paper bg-indigo-500 rounded ${
               isLoading ? "bg-paper-half " : "bg-primary"
             } hover:bg-primary-half`}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
+            onClick={(event) => handleSubmit(event)}
           >
             {isLoading ? (
               <>

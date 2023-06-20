@@ -4,8 +4,9 @@ export interface MyObject {
   [key: string]: string;
 }
 
-export const relocateUrl = (url: string) => window.location.href = url
-
+export const relocateUrl = (url: string) => {
+  return window.location.href = url
+}
 export const orderObject = (obj: IJoke, keysOrder: string[]): MyObject => {
   const ordered: MyObject = {};
   keysOrder.forEach((key) => {
@@ -45,12 +46,12 @@ export const compareArrays = (arr1: unknown[], arr2: unknown[]) => {
   const matchIndices: string[] = [];
   arr1.forEach((item, index) => {
     if (arr2.includes(item)) {
-      matchIndices.push(index);
+      matchIndices.push(index.toString());
     }
   });
 
   for (let i = matchIndices.length - 1; i >= 0; i--) {
-    arr1.splice(matchIndices[i], 1);
+    arr1.splice(Number(matchIndices[i]), 1);
   }
 
   return arr1;

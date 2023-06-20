@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
 import { createNumberArray } from "../utils"
 
@@ -9,12 +10,10 @@ export const FormSkeleton = ({
   cols?: number
 }) => {
   const [fields, setfields] = useState<number[]>()
-  const [colsNumber, setColsNumber] = useState("grid grid-cols-5 gap-4")
 
   useEffect(() => {
     const newRows: number[] = createNumberArray(1, rows)
     setfields(newRows)
-    setColsNumber(`grid grid-cols-${cols} gap-4`)
   }, [rows, cols])
 
   return (

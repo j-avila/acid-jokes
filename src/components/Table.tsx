@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // libraries
 import { useEffect, useState } from "react"
-import { MyObject, compareArrays, orderObject } from "../utils"
+import { compareArrays, orderObject } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoffee } from "@fortawesome/free-solid-svg-icons"
 // components
@@ -9,6 +9,7 @@ import TableLoader from "./TableSkeleton"
 // types
 import { IJoke, Itable } from "../pages/types"
 import { useNotifications } from "../context/useNotifications"
+import { Link } from "react-router-dom"
 
 // rows
 const TdItems = (props: {
@@ -16,6 +17,7 @@ const TdItems = (props: {
   index: number
   key: string | number
   hidden: string[]
+  [key: string]: unknown
 }) => {
   const { cell, index, hidden } = props
   const keys = Object.keys(cell)
@@ -50,21 +52,26 @@ const TdItems = (props: {
   return (
     <>
       {keysFiltered.length > 0 ? (
-        keysFiltered.map((key) => (
+        keysFiltered.map((key: string) => (
           <>
             {key === "title" || key == "#" ? (
-              <a
+              <Link
                 className="hover:underline"
-                href={`/detail/${cell.id}`}
+                to={`/detail/${cell.id}`}
                 key={`cell-${key}`}
               >
-                <div className={handleViewsStyles(key, cell[key])}>
-                  {cell[key] ||
-                    (cell[key] === " " && "no data") ||
+                <div
+                  className={handleViewsStyles(
+                    key as string,
+                    cell[key as string]
+                  )}
+                >
+                  {cell[key as string] ||
+                    (cell[key as string] === " " && "no data") ||
                     index ||
                     "No Aviable"}
                 </div>
-              </a>
+              </Link>
             ) : (
               <div className={handleViewsStyles(key, cell[key])}>
                 {cell[key] ||
@@ -87,21 +94,18 @@ const Table = (props: {
   data?: Itable
   tableKeys: { heads: string[]; hiddenValues: string[] }
   isLoading: boolean
+  [key: string]: unknown
 }) => {
   const { data, tableKeys, isLoading } = props
-  const [cells, setCells] = useState<IJoke[]>()
+  const [cells, setCells] = useState([])
   const { value } = useNotifications()
-  const [colsHead, setColsHead] = useState<string>(
+  const [colsHead, setColsHead] = useState(
     "tableHeads grid grid-cols-1 gap-0 md:grid-cols-5"
   )
-  const [colsBody, setColsBody] = useState<string>("")
+  const [colsBody, setColsBody] = useState("")
   // parsing the cells
-  const tableCells = (
-    cellData: IJoke[],
-    cellKeys: string[],
-    hidden: string[]
-  ) => {
-    const getCells = (cell: IJoke, accept: string[], hiddenVals: string[]) => {
+  const tableCells = (cellData, cellKeys, hidden) => {
+    const getCells = (cell, accept, hiddenVals): unknown => {
       const allValues = hiddenVals ? [...accept, ...hiddenVals] : accept
       const result: object = {}
 
@@ -114,16 +118,14 @@ const Table = (props: {
       return result
     }
 
-    const result: Partial<IJoke[]> = cellData.map((cell) =>
-      getCells(cell, cellKeys, hidden)
-    )
+    const result = cellData.map((cell) => getCells(cell, cellKeys, hidden))
 
     setCells(result)
   }
 
   useEffect(() => {
     if (data && tableKeys.heads.length > 0) {
-      const formattedData: MyObject[] = data.map((item) => {
+      const formattedData = data.map((item) => {
         const allKeys = [...tableKeys.heads, ...tableKeys.hiddenValues]
         return orderObject(item, allKeys)
       })
@@ -135,7 +137,7 @@ const Table = (props: {
         `tableRows my-1 bg-paper bg-opacity-5 grid grid-cols-1 gap-0 md:grid-cols-${tableKeys.heads.length} rounded-lg`
       )
 
-      tableCells(formattedData, tableKeys.heads, tableKeys.hiddenValues)
+      tableCells(formattedData as any, tableKeys.heads, tableKeys.hiddenValues)
     }
   }, [data])
 
@@ -168,7 +170,7 @@ const Table = (props: {
         <>
           <TableLoader />
         </>
-      ) : cells?.length > 0 ? (
+      ) : cells && cells.length > 0 ? (
         <>
           {cells ? (
             cells.map((cell, index) => (

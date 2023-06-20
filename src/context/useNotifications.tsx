@@ -1,7 +1,7 @@
 import { useContext } from "react"
-import { Notifications, NotificationsProps } from "./ContextWrapper"
+import { Notifications } from "./ContextWrapper"
 
-export const useNotifications = (): NotificationsProps => {
+export const useNotifications = () => {
   const context = useContext(Notifications)
   if (!context) {
     throw new Error(

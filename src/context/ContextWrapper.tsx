@@ -5,11 +5,12 @@ type IValueObj = {
   duration: number
   action: () => void
   dark?: boolean
+  id?: unknown
 }
 
 export interface INotificationsProps {
   value: IValueObj
-  updateValue: (newValue: IValueObj) => void
+  updateValue: (newValue) => void
 }
 
 export const Notifications = createContext<INotificationsProps | undefined>(
@@ -22,9 +23,10 @@ const NotificationsProvider = ({ children }) => {
     type: "alert",
     duration: undefined,
     dark: false,
+    action: undefined,
   })
 
-  const updateValue = (newValue: IValueObj) => {
+  const updateValue = (newValue) => {
     setValue(newValue)
   }
 

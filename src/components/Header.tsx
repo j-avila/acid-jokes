@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
-import { findWord, relocateUrl } from "../utils"
+import { findWord } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCode } from "@fortawesome/free-solid-svg-icons"
 import ThemeToggle from "./ThemeToggle"
+import { Link } from "react-router-dom"
 
 type IAction = {
   [key: string]: {
     title: string
     styles: string
-    action: () => void
+    route: string
   }
 }
 
@@ -19,27 +20,28 @@ const ActionButton = (props: { action: string }): JSX.Element => {
     createJoke: {
       title: "New joke",
       styles:
-        "px-4 py-2 block text-background bg-indigo-500 rounded bg-secondary hover:bg-secondary-half",
-      action: () => relocateUrl("/detail/"),
+        "px-4 py-2 block text-paper bg-indigo-500 flex items-center rounded bg-secondary  hover:bg-secondary-half",
+      route: "/detail",
     },
     back: {
       title: "Go back",
       styles:
-        "px-4 py-2 block text-background bg-indigo-500 rounded bg-secondary hover:bg-secondary-half",
-      action: () => relocateUrl("/"),
+        "px-4 py-2 block text-paper bg-indigo-500 flex items-center rounded bg-secondary hover:bg-secondary-half",
+      route: "/",
     },
   }
 
   return (
     <>
       {Object.keys(actionVariants).includes(action) && (
-        <button
-          type="button"
-          onClick={actionVariants[action].action}
+        <Link
+          to={actionVariants[action].route}
           className={actionVariants[action].styles}
         >
-          <span>{actionVariants[action].title}</span>
-        </button>
+          <span className="m-auto text-paper">
+            {actionVariants[action].title}
+          </span>
+        </Link>
       )}
     </>
   )
@@ -64,7 +66,7 @@ const Header = () => {
   return (
     <header className="flex justify-between align-middle w-full py-8 px-12 ">
       <h1 className="text-xl font-bold text-center py-2">
-        Acid <FontAwesomeIcon className="font-primary" icon={faCode} beatFade />{" "}
+        Acid <FontAwesomeIcon className="font-primary" icon={faCode} beatFade />
         jokes
       </h1>
       <div className="flex">

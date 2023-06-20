@@ -1,11 +1,10 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from "react"
+import { useState, ChangeEvent, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { handleJokes, useJokeDetail } from "../services"
-import { IJoke } from "./types"
+import { IJoke, Itable } from "./types"
 import FormSkeleton from "../components/FormSleketon"
 import { useNotifications } from "../context/useNotifications"
-import { relocateUrl } from "../utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faFan,
@@ -15,6 +14,7 @@ import {
 
 const JokeDetail = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { updateValue } = useNotifications()
   const morphedId = Number(id)
   const [formData, setFormData] = useState<Exclude<IJoke, "id">>({
@@ -30,21 +30,23 @@ const JokeDetail = () => {
   const [isHover, setHover] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
 
+  interface Imutation extends Itable {
+    id?: number
+  }
+
   // handling the fetching events
   const mutation = useMutation({
     mutationFn: handleJokes,
-    onSuccess: (data): void => {
-      console.log(data)
+    onSuccess: (data: Imutation) => {
       const success = {
         message: "Joke saved successfully 👻 !",
         type: "success",
-        action: () => relocateUrl("/"),
+        action: () => navigate("/"),
         duration: 3000,
       }
       const deleted = {
         message: "Joke deleted 💩 !",
-        type: "error",
-        action: () => relocateUrl("/"),
+        action: () => navigate("/"),
         duration: 3000,
       }
 
@@ -61,7 +63,7 @@ const JokeDetail = () => {
     },
   })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prevState) => ({
       ...prevState,
@@ -69,7 +71,7 @@ const JokeDetail = () => {
     }))
   }
 
-  const handleSubmit = (e: FormEvent<HTMLInputElement>): void => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     // Handle form submission logic here
     const method = id ? "patch" : "post"
@@ -87,10 +89,9 @@ const JokeDetail = () => {
   }, [data])
 
   return (
-    <form
-      onSubmit={handleSubmit}
+    <div
       className={`rounded-lg shadow-md p-6 max-w-md mx-auto ${
-        value ? "dark:bg-font" : "bg-paper "
+        value.dark ? "dark:bg-font" : "bg-paper"
       }`}
     >
       {isLoading ? (
@@ -176,7 +177,7 @@ const JokeDetail = () => {
               id="body"
               name="body"
               value={formData?.body}
-              onChange={handleChange}
+              onChange={() => handleChange}
               rows={10}
               className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required
@@ -185,13 +186,14 @@ const JokeDetail = () => {
         </>
       )}
       <button
-        type="submit"
+        type="button"
         disabled={loading}
-        className={`w-full px-4 py-2 text-background bg-indigo-500 rounded ${
+        className={`w-full px-4 py-2 text-paper bg-indigo-500 rounded ${
           loading ? "bg-paper-half " : "bg-primary"
         } hover:bg-primary-half`}
         onMouseEnter={() => setHover("plane")}
         onMouseLeave={() => setHover("plane")}
+        onClick={(e) => handleSubmit(e)}
       >
         {loading ? (
           <>
@@ -215,7 +217,7 @@ const JokeDetail = () => {
         <button
           type="button"
           disabled={loading}
-          className={`w-full px-4 py-2 mt-6 bg-indigo-500 rounded ${
+          className={`w-full px-4 py-2 mt-6 text-paper rounded ${
             loading ? "bg-paper-half" : "bg-error"
           }`}
           onClick={() => handleDelete()}
@@ -246,7 +248,7 @@ const JokeDetail = () => {
           )}
         </button>
       )}
-    </form>
+    </div>
   )
 }
 

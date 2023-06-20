@@ -2,8 +2,6 @@
 // libraries
 import { useEffect, useState } from "react"
 import { baseUrl, compareArrays, orderObject } from "../utils"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCoffee } from "@fortawesome/free-solid-svg-icons"
 // components
 import TableLoader from "./TableSkeleton"
 // types

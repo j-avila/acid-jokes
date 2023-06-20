@@ -17,37 +17,56 @@ import { useNotifications } from "./context/useNotifications"
 // styles
 import "./app.css"
 import "tailwindcss/tailwind.css"
+import ErrorMug from "./components/Error"
 
 const queryClient = new QueryClient()
+
+export const Layout = ({ children }) => (
+  <>
+    <Header />
+    {children}
+    <Footer />
+  </>
+)
+
 const router = createBrowserRouter([
   {
     path: baseUrl,
     element: (
-      <>
-        <Header />
+      <Layout>
         <HomePage />
-        <Footer />
-      </>
+      </Layout>
+    ),
+    errorElement: (
+      <Layout>
+        <ErrorMug dark={false} />
+      </Layout>
     ),
   },
   {
     path: `${baseUrl}detail/`,
     element: (
-      <>
-        <Header />
+      <Layout>
         <JokeDetail />
-        <Footer />
-      </>
+      </Layout>
+    ),
+    errorElement: (
+      <Layout>
+        <ErrorMug dark={false} />
+      </Layout>
     ),
   },
   {
     path: `${baseUrl}detail/:id`,
     element: (
-      <>
-        <Header />
+      <Layout>
         <JokeDetail />
-        <Footer />
-      </>
+      </Layout>
+    ),
+    errorElement: (
+      <Layout>
+        <ErrorMug dark={false} />
+      </Layout>
     ),
   },
 ])

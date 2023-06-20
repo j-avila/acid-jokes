@@ -64,7 +64,9 @@ const JokeDetail = () => {
     },
   })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target
     setFormData((prevState) => ({
       ...prevState,
@@ -88,6 +90,10 @@ const JokeDetail = () => {
   useEffect(() => {
     data && setFormData(data)
   }, [data])
+
+  useEffect(() => {
+    console.log("✏", formData)
+  }, [formData])
 
   return (
     <div
@@ -178,7 +184,7 @@ const JokeDetail = () => {
               id="body"
               name="body"
               value={formData?.body}
-              onChange={() => handleChange}
+              onChange={(e) => handleChange(e)}
               rows={10}
               className="w-full px-4 py-2 text-font border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               required

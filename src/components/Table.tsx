@@ -10,6 +10,7 @@ import TableLoader from "./TableSkeleton"
 import { IJoke, Itable } from "../pages/types"
 import { useNotifications } from "../context/useNotifications"
 import { Link } from "react-router-dom"
+import ErrorMug from "./Error"
 
 // rows
 const TdItems = (props: {
@@ -188,14 +189,7 @@ const Table = (props: {
           )}
         </>
       ) : (
-        <div
-          className={`flex-col text-center my-10 p-8 rounded ${
-            value.dark ? "dark:bg-font-half" : "bg-paper-half"
-          }`}
-        >
-          <FontAwesomeIcon icon={faCoffee} fontSize={100} className="pb-8" />
-          <h1 className="text-lg ">You've reached the end of the jokes</h1>
-        </div>
+        <ErrorMug dark={value.dark} />
       )}
     </div>
   )

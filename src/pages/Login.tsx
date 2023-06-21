@@ -47,7 +47,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className=" w-[45%]  content-center">
+      <div className=" w-[80%] md:w-[70%] lg:w-[45%] content-center">
         <Logo />
         <form
           className={`rounded-lg shadow-md p-6 max-w-md mx-auto mt-6 ${
